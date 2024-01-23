@@ -21,8 +21,8 @@ function updateHeatmap(filteredData) {
         return;
     }
 
-    // Ensure that the filteredData has the required properties (Name, BloodPressure, Glucose)
-    const requiredProperties = ['Name', 'BloodPressure', 'Glucose'];
+    
+    const requiredProperties = ['Country', 'Year', 'Underfive_mortality_rate'];
     if (!requiredProperties.every(prop => prop in filteredData[0])) {
         console.error('Data does not have the required properties:', filteredData[0]);
         return;
@@ -30,7 +30,7 @@ function updateHeatmap(filteredData) {
 
     // Define the dimensions of the heatmap
     const margin = { top: 80, right: 50, bottom: 60, left: 50 };
-    const width = 800 - margin.left - margin.right;
+    const width = 900 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
     // Create an SVG element
@@ -43,49 +43,49 @@ function updateHeatmap(filteredData) {
 
     // Set up scales
     const xScale = d3.scaleBand()
-        .domain(filteredData.map(d => d.Name))
+        .domain(filteredData.map(d => d.Country))
         .range([0, width])
         .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(filteredData, d => Math.max(d.BloodPressure, d.Glucose))])
+        .domain([0, d3.max(filteredData, d => Math.max(d.Year, d.Underfive_mortality_rate))])
         .range([height, 0]);
 
-    // Define a color scale for BloodPressure
-    const colorScaleBloodPressure = d3.scaleLinear()
-        .domain([60, 90, d3.max(filteredData, d => d.BloodPressure)])
-        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range for BloodPressure (light red to dark red)
+    // Define a color scale for Year
+    const colorScaleYear = d3.scaleLinear()
+        .domain([60, 90, d3.max(filteredData, d => d.Year)])
+        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range for Year (light red to dark red)
 
-    // Define a color scale for Glucose
-    const colorScaleGlucose = d3.scaleLinear()
-        .domain([70, 99, d3.max(filteredData, d => d.Glucose)])
-        .range(["#cce5ff", "#4d94ff", "#0066ff"]); // Specify the color range for Glucose (light blue to dark blue)
+    // Define a color scale for Underfive_mortality_rate
+    const colorScaleUnderfive_mortality_rate = d3.scaleLinear()
+        .domain([70, 99, d3.max(filteredData, d => d.Underfive_mortality_rate)])
+        .range(["#cce5ff", "#4d94ff", "#0066ff"]); // Specify the color range for Underfive_mortality_rate(light blue to dark blue)
 
-    // Add red bars for BloodPressure
-    svg.selectAll(".bar-bloodpressure")
+    // Add red bars for Year
+    svg.selectAll(".bar-year")
         .data(filteredData)
         .enter()
         .append("rect")
-        .attr("class", "bar-bloodpressure")
-        .attr("x", d => xScale(d.Name))
-        .attr("y", d => yScale(d.BloodPressure))
+        .attr("class", "bar-year")
+        .attr("x", d => xScale(d.Country))
+        .attr("y", d => yScale(d.Year))
         .attr("width", xScale.bandwidth() / 3)
-        .attr("height", d => height - yScale(d.BloodPressure))
-        .attr("fill", d => colorScaleBloodPressure(d.BloodPressure)) // Use the color scale for BloodPressure
-        .on("click", d => displayBarsForName(d)); // Add a click event listener
+        .attr("height", d => height - yScale(d.Year))
+        .attr("fill", d => colorScaleYear(d.Year)) // Use the color scale for Year
+        .on("click", d => displayBarsForCountry(d)); // Add a click event listener
 
-    // Add blue bars for Glucose
-    svg.selectAll(".bar-glucose")
+    // Add blue bars for Underfive_mortality_rate
+    svg.selectAll(".bar-Underfive_mortality_rate")
         .data(filteredData)
         .enter()
         .append("rect")
-        .attr("class", "bar-glucose")
-        .attr("x", d => xScale(d.Name) + xScale.bandwidth() * 2 / 3)
-        .attr("y", d => yScale(d.Glucose))
+        .attr("class", "bar-Underfive_mortality_rate")
+        .attr("x", d => xScale(d.Country) + xScale.bandwidth() * 2 / 3)
+        .attr("y", d => yScale(d.Underfive_mortality_rate))
         .attr("width", xScale.bandwidth() / 3)
-        .attr("height", d => height - yScale(d.Glucose))
-        .attr("fill", d => colorScaleGlucose(d.Glucose)) // Use the color scale for Glucose
-        .on("click", d => displayBarsForName(d)); // Add a click event listener
+        .attr("height", d => height - yScale(d.Underfive_mortality_rate))
+        .attr("fill", d => colorScaleUnderfive_mortality_rate(d.Underfive_mortality_rate)) // Use the color scale for Underfive_mortality_rate
+        .on("click", d => displayBarsForCountry(d)); // Add a click event listener
 
     // Add x-axis
     svg.append("g")
@@ -108,52 +108,52 @@ function updateHeatmap(filteredData) {
         .style("text-anchor", "middle")
         .text("Scale");
 
-    // Add names below the bars if filteredData is not the entire dataset
+    // Add countries below the bars if filteredData is not the entire dataset
     if (filteredData !== data) {
-        svg.selectAll(".bar-names")
+        svg.selectAll(".bar-countries")
             .data(filteredData)
             .enter()
             .append("text")
-            .attr("class", "bar-names")
-            .attr("x", d => xScale(d.Name) + xScale.bandwidth() / 2)
+            .attr("class", "bar-countries")
+            .attr("x", d => xScale(d.Country) + xScale.bandwidth() / 2)
             .attr("y", height + margin.top + 350)
             .attr("text-anchor", "middle")
-            .text(d => d.Name)
+            .text(d => d.Country)
             .style("font-size", "12px")
             .style("cursor", "pointer")  // Set the cursor to pointer
-            .on("click", d => displayBarsForName(d));  // Add a click event listener
+            .on("click", d => displayBarsForCountry(d));  // Add a click event listener
     }
 
-// Add red legend for BloodPressure
-const legendBloodPressure = d3.select("svg")
+// Add red legend for Year
+const legendYear = d3.select("svg")
     .append("g")
     .attr("transform", "translate(-2, 1)"); // Move 10 units to the right and 20 units up
 
-legendBloodPressure.append("rect")
+legendYear.append("rect")
     .attr("width", 15)
     .attr("height", 15)
-    .attr("fill", "#ff0000"); // Red color for BloodPressure
+    .attr("fill", "#ff0000"); // Red color for Year
 
-legendBloodPressure.append("text")
-    .attr("x", 25)
-    .attr("y", 10)
-    .text("BloodPressure")
+legendYear.append("text")
+    .attr("x", 30)
+    .attr("y", 20)
+    .text("Year")
     .style("font-size", "12px");
 
-// Add blue legend for Glucose
-const legendGlucose = d3.select("svg")
+// Add blue legend for Underfive_mortality_rate
+const legendUnderfive_mortality_rate = d3.select("svg")
     .append("g")
     .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 5 units up
 
-legendGlucose.append("rect")
+legendUnderfive_mortality_rate.append("rect")
     .attr("width", 15)
     .attr("height", 15)
-    .attr("fill", "#0066ff"); // Blue color for Glucose
+    .attr("fill", "#0066ff"); // Blue color for Underfive_mortality_rate
 
-legendGlucose.append("text")
+legendUnderfive_mortality_rate.append("text")
     .attr("x", 25)
     .attr("y", 10)
-    .text("Glucose")
+    .text("Underfive_mortality_rate")
     .style("font-size", "12px");
 
 }
@@ -196,10 +196,10 @@ function filterData(searchTerm) {
         })
         .catch(error => console.error('Error fetching data:', error));
 }
-// Function to display details for a specific name
+// Function to display details for a specific country
 function displayDetails(selectedData, allData) {
     // Check if selectedData and its properties are available
-    if (!selectedData || typeof selectedData !== 'object' || !('Name' in selectedData)) {
+    if (!selectedData || typeof selectedData !== 'object' || !('Country' in selectedData)) {
         console.error('Invalid or missing data:', selectedData);
         return;
     }
@@ -217,10 +217,9 @@ function displayDetails(selectedData, allData) {
 
     // Add details to the div
     detailsDiv.html(`
-        <h3>${selectedData.Name}</h3>
-        <p>Date of Birth: ${selectedData.DateOfBirth || 'N/A'}</p>
-        <p>Age: ${selectedData.Age || 'N/A'}</p>
-        <img src="static/images/${selectedData.Picture || 'default.jpg'}" alt="${selectedData.Name}" style="max-width: 100%; height: auto;">
+        <h3>${selectedData.Country}</h3>
+        
+        <img src="static/images/${selectedData.Country || 'default.png'}" alt="${selectedData.Country}" style="max-width: 100%; height: auto;">
     `);
 
     // Display the details div
@@ -231,23 +230,23 @@ function displayDetails(selectedData, allData) {
 
 
 
-// Function to display bars for a specific name
-function displayBarsForName(selectedData) {
-    // Create a subset of data containing only the selected name
-    const subsetData = data.filter(d => d.Name === selectedData.Name);
+// Function to display bars for a specific country
+function displayBarsForCountry(selectedData) {
+    // Create a subset of data containing only the selected country
+    const subsetData = data.filter(d => d.Country === selectedData.Country);
 
     // Update the heatmap with the subset data
     updateHeatmap(subsetData);
 
-    // Display details for the selected name
-    displayDetails(selectedData.Name, data);
+    // Display details for the selected counrty
+    displayDetails(selectedData.Country, data);
 }
 
-// Function to display details for a specific name
-// Function to display details for a specific name
+// Function to display details for a specific country
+// Function to display details for a specific country
 function displayDetails(selectedData, allData) {
-    // Create a subset of data containing only the selected name
-    const subsetData = allData.filter(d => d.Name === selectedData);
+    // Create a subset of data containing only the selected country
+    const subsetData = allData.filter(d => d.Country === selectedData);
 
     // Remove existing details
     d3.select("#details").remove();
@@ -265,12 +264,12 @@ function displayDetails(selectedData, allData) {
 
     // Add details to the div
     detailsDiv.html(`
-        <h3>${subsetData[0].Name}</h3>
-        <p>Date of Birth: ${subsetData[0].DateOfBirth}</p>
-        <p>Age: ${subsetData[0].Age}</p>
-        <p>Glucose: ${subsetData[0].Glucose}</p>
-        <p>Blood Pressure: ${subsetData[0].BloodPressure}</p>
-        <img src="static/images/${subsetData[0].Picture}" alt="${subsetData[0].Name}" style="max-width: 100%; height: auto;">
+        <h3>${subsetData[0].Country}</h3>
+        <p>Code: ${subsetData[0].Code}</p>
+        
+        <p>Un: ${subsetData[0].Underfive_mortality_rate}</p>
+        <p>Year: ${subsetData[0].Year}</p>
+        <img src="static/images/${subsetData[0].Country}" alt="${subsetData[0].Country}" style="max-width: 100%; height: auto;">
     `);
 
     // Display the details div

@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Heatmap Dashboard</title>
+    <title>Under Five Mortality Rate Heatmap</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 
     <div class="dashboard-container">
-        <h1>Diabetes Heatmap Dashboard</h1>
+        <h1>Under Five Mortality Rate Heatmap</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search Name or click on bar">
+            <input type="text" id="searchInput" placeholder="Search Country or click on bar">
             <button onclick="filterData()">Search</button>
             <button onclick="filterData('all')">All</button>
         </div>
         <div id="heatmap"></div>
         <div id="detailsContainer" style="display: none;">
             <img id="detailsImage" src="" alt="Details Image">
-            <!-- Other details (Name, Date of Birth, Age) can be added here -->
+            <!-- Other details (Contry, Code) can be added here -->
         </div>
     </div>
 
