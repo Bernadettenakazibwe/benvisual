@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Five Mortality Rate Heatmap</title>
+    <title>Males and females with intellectual disabilities</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
-<body>
+<body style="background-color: ">
 
     <div class="dashboard-container">
-        <h1>Under Five Mortality Rate Heatmap</h1>
+        <h1>Heatmap showing males and females with intellectual disabilities</h1>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search Country or click on bar">
             <button onclick="filterData()">Search</button>
             <button onclick="filterData('all')">All</button>
         </div>
-        <div id="heatmap"></div>
+        <div id="heatmap" style=""></div>
         <div id="detailsContainer" style="display: none;">
             <img id="detailsImage" src="" alt="Details Image">
-            <!-- Other details (Contry, Code) can be added here -->
+            <!-- Other details (Country, Code) can be added here -->
         </div>
     </div>
 

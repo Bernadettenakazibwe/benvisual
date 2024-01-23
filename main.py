@@ -3,8 +3,8 @@ import json
 
 app = Flask(__name__)
 
-# Load the data from mortality.json
-with open('mortality.json') as f:
+# Load the data from data.json
+with open('data.json') as f:
     data = json.load(f)
 
 @app.route('/')

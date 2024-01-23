@@ -22,7 +22,7 @@ function updateHeatmap(filteredData) {
     }
 
     
-    const requiredProperties = ['Country', 'Year', 'Underfive_mortality_rate'];
+    const requiredProperties = ['Country', 'males', 'females'];
     if (!requiredProperties.every(prop => prop in filteredData[0])) {
         console.error('Data does not have the required properties:', filteredData[0]);
         return;
@@ -48,51 +48,52 @@ function updateHeatmap(filteredData) {
         .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(filteredData, d => Math.max(d.Year, d.Underfive_mortality_rate))])
+        .domain([0, d3.max(filteredData, d => Math.max(d.males, d.females))])
         .range([height, 0]);
 
-    // Define a color scale for Year
-    const colorScaleYear = d3.scaleLinear()
-        .domain([60, 90, d3.max(filteredData, d => d.Year)])
-        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range for Year (light red to dark red)
+    // Define a color scale for males
+    const colorScalemales = d3.scaleLinear()
+        .domain([60, 90, d3.max(filteredData, d => d.males)])
+        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range males (light red to dark red)
 
-    // Define a color scale for Underfive_mortality_rate
-    const colorScaleUnderfive_mortality_rate = d3.scaleLinear()
-        .domain([70, 99, d3.max(filteredData, d => d.Underfive_mortality_rate)])
-        .range(["#cce5ff", "#4d94ff", "#0066ff"]); // Specify the color range for Underfive_mortality_rate(light blue to dark blue)
+    // Define a color scale for females
+    const colorScalefemales = d3.scaleLinear()
+        .domain([70, 99, d3.max(filteredData, d => d.females)])
+        .range(["#cce5ff", "#4d94ff", "#0066ff"]); // Specify the color range for females(light blue to dark blue)
 
-    // Add red bars for Year
-    svg.selectAll(".bar-year")
+    // Add red bars males
+    svg.selectAll(".bar-males")
         .data(filteredData)
         .enter()
         .append("rect")
-        .attr("class", "bar-year")
+        .attr("class", "bar-males")
         .attr("x", d => xScale(d.Country))
-        .attr("y", d => yScale(d.Year))
-        .attr("width", xScale.bandwidth() / 3)
-        .attr("height", d => height - yScale(d.Year))
-        .attr("fill", d => colorScaleYear(d.Year)) // Use the color scale for Year
+        .attr("y", d => yScale(d.males))
+        .attr("width", xScale.bandwidth() /4)
+        .attr("height", d => height - yScale(d.males))
+        .attr("fill", d => colorScalemales(d.males)) // Use the color scale males
         .on("click", d => displayBarsForCountry(d)); // Add a click event listener
 
-    // Add blue bars for Underfive_mortality_rate
-    svg.selectAll(".bar-Underfive_mortality_rate")
+    // Add blue bars for females
+    svg.selectAll(".bar-females")
         .data(filteredData)
         .enter()
         .append("rect")
-        .attr("class", "bar-Underfive_mortality_rate")
-        .attr("x", d => xScale(d.Country) + xScale.bandwidth() * 2 / 3)
-        .attr("y", d => yScale(d.Underfive_mortality_rate))
-        .attr("width", xScale.bandwidth() / 3)
-        .attr("height", d => height - yScale(d.Underfive_mortality_rate))
-        .attr("fill", d => colorScaleUnderfive_mortality_rate(d.Underfive_mortality_rate)) // Use the color scale for Underfive_mortality_rate
+        .attr("class", "bar-females")
+        .attr("x", d => xScale(d.Country) + xScale.bandwidth() * 2/3 )
+        .attr("y", d => yScale(d.females) )
+        .attr("width", xScale.bandwidth() *3)
+        .attr("height", d => height - yScale(d.females) )
+        .attr("fill", d => colorScalefemales(d.females)) // Use the color scale for females
         .on("click", d => displayBarsForCountry(d)); // Add a click event listener
 
     // Add x-axis
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xScale))
+        .call(d3.axisBottom(xScale)
+        .tickValues(xScale.domain().filter((d, i) => i % 2 === 0)))
         .selectAll("text")
-        .attr("transform", "rotate(-45)")
+       .attr("transform", "rotate(-90)")
         .style("text-anchor", "end");
 
     // Add y-axis
@@ -118,42 +119,42 @@ function updateHeatmap(filteredData) {
             .attr("x", d => xScale(d.Country) + xScale.bandwidth() / 2)
             .attr("y", height + margin.top + 350)
             .attr("text-anchor", "middle")
-            .text(d => d.Country)
-            .style("font-size", "12px")
+            .text("")
+            .style("font-size", "10px")
             .style("cursor", "pointer")  // Set the cursor to pointer
             .on("click", d => displayBarsForCountry(d));  // Add a click event listener
     }
 
-// Add red legend for Year
-const legendYear = d3.select("svg")
+// Add red legend males
+const legendmales = d3.select("svg")
     .append("g")
-    .attr("transform", "translate(-2, 1)"); // Move 10 units to the right and 20 units up
+    .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 20 units up
 
-legendYear.append("rect")
-    .attr("width", 15)
-    .attr("height", 15)
-    .attr("fill", "#ff0000"); // Red color for Year
+legendmales.append("rect")
+    .attr("width", 25)
+    .attr("height", 10)
+    .attr("fill", "#ff0000"); // Red color males
 
-legendYear.append("text")
-    .attr("x", 30)
-    .attr("y", 20)
-    .text("Year")
+legendmales.append("text")
+    .attr("x", 25)
+    .attr("y", 10)
+    .text("males")
     .style("font-size", "12px");
 
-// Add blue legend for Underfive_mortality_rate
-const legendUnderfive_mortality_rate = d3.select("svg")
+// Add blue legend for females
+const legendfemales = d3.select("svg")
     .append("g")
     .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 5 units up
 
-legendUnderfive_mortality_rate.append("rect")
+legendfemales.append("rect")
     .attr("width", 15)
     .attr("height", 15)
-    .attr("fill", "#0066ff"); // Blue color for Underfive_mortality_rate
+    .attr("fill", "#0066ff"); // Blue color for females
 
-legendUnderfive_mortality_rate.append("text")
+legendfemales.append("text")
     .attr("x", 25)
     .attr("y", 10)
-    .text("Underfive_mortality_rate")
+    .text("females")
     .style("font-size", "12px");
 
 }
@@ -219,7 +220,7 @@ function displayDetails(selectedData, allData) {
     detailsDiv.html(`
         <h3>${selectedData.Country}</h3>
         
-        <img src="static/images/${selectedData.Country || 'default.png'}" alt="${selectedData.Country}" style="max-width: 100%; height: auto;">
+        <img src="static/images/${selectedData.Country|| 'default.jpg'}" alt="${selectedData.Country}" style="max-width: 100%; height: auto;">
     `);
 
     // Display the details div
@@ -238,7 +239,7 @@ function displayBarsForCountry(selectedData) {
     // Update the heatmap with the subset data
     updateHeatmap(subsetData);
 
-    // Display details for the selected counrty
+    // Display details for the selected country
     displayDetails(selectedData.Country, data);
 }
 
@@ -267,9 +268,9 @@ function displayDetails(selectedData, allData) {
         <h3>${subsetData[0].Country}</h3>
         <p>Code: ${subsetData[0].Code}</p>
         
-        <p>Un: ${subsetData[0].Underfive_mortality_rate}</p>
-        <p>Year: ${subsetData[0].Year}</p>
-        <img src="static/images/${subsetData[0].Country}" alt="${subsetData[0].Country}" style="max-width: 100%; height: auto;">
+        <p>females: ${subsetData[0].females}</p>
+        <p>males: ${subsetData[0].males}</p>
+        <img src="static/images/${subsetData[0].Country}.png" alt="${subsetData[0].Country}" style="max-width: 100%; height: auto;">
     `);
 
     // Display the details div
