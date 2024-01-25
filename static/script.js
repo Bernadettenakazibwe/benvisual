@@ -29,7 +29,7 @@ function updateHeatmap(filteredData) {
     }
 
     // Define the dimensions of the heatmap
-    const margin = { top: 80, right: 50, bottom: 60, left: 50 };
+    const margin = { top: 80, right: 50, bottom: 60, left: 60 };
     const width = 900 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -45,7 +45,7 @@ function updateHeatmap(filteredData) {
     const xScale = d3.scaleBand()
         .domain(filteredData.map(d => d.Country))
         .range([0, width])
-        .padding(1);
+        .padding(0.1);
 
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => Math.max(d.males, d.females))])
@@ -54,12 +54,12 @@ function updateHeatmap(filteredData) {
     // Define a color scale for males
     const colorScalemales = d3.scaleLinear()
         .domain([60, 90, d3.max(filteredData, d => d.males)])
-        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range males 
+        .range(["#33cc33", "#00ff00", "#00cc00"]); // Specify the color range males 
 
     // Define a color scale for females
     const colorScalefemales = d3.scaleLinear()
         .domain([70, 99, d3.max(filteredData, d => d.females)])
-        .range(["#cce5ff", "#4d94ff", "#0066ff"]);
+        .range(["#ffff00", "#ffcc00", "#ff9900"]);
 
     // Add  bars males
     svg.selectAll(".bar-males")
@@ -82,7 +82,7 @@ function updateHeatmap(filteredData) {
         .attr("class", "bar-females")
         .attr("x", d => xScale(d.Country) + xScale.bandwidth() * 2/3 )
         .attr("y", d => yScale(d.females) )
-        .attr("width", xScale.bandwidth() *3)
+        .attr("width", xScale.bandwidth() )
         .attr("height", d => height - yScale(d.females) )
         .attr("fill", d => colorScalefemales(d.females)) // Use the color scale for females
         .on("click", d => displayBarsForCountry(d)); // Add a click event listener
@@ -91,9 +91,10 @@ function updateHeatmap(filteredData) {
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale)
-        .tickValues(xScale.domain().filter((d, i) => i % 2 === 0)))
+        .tickValues(xScale.domain().filter((d, i) => i % 7 === 0)))
         .selectAll("text")
-        .attr("transform", "rotate(-90)")
+        .attr("transform", "rotate(-80)")
+        .style("font-size", "9px")
         .style("text-anchor", "end");
 
     // Add y-axis
@@ -119,8 +120,8 @@ function updateHeatmap(filteredData) {
             .attr("x", d => xScale(d.Country) + xScale.bandwidth() / 2)
             .attr("y", height + margin.top + 350)
             .attr("text-anchor", "middle")
-            .text("")
-            .style("font-size", "10px")
+            .text(d => d.Country)
+            .style("font-size", "12px")
             .style("cursor", "pointer")  // Set the cursor to pointer
             .on("click", d => displayBarsForCountry(d));  // Add a click event listener
     }
@@ -128,11 +129,11 @@ function updateHeatmap(filteredData) {
 // Add  legend males
 const legendmales = d3.select("svg")
     .append("g")
-    .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 20 units up
+    .attr("transform", "translate(-2, 1)"); // Move 10 units to the right and 20 units up
 
 legendmales.append("rect")
-    .attr("width", 20)
-    .attr("height", 10)
+    .attr("width", 15)
+    .attr("height", 15)
     .attr("fill", "Green"); 
 
 legendmales.append("text")
@@ -149,12 +150,12 @@ const legendfemales = d3.select("svg")
 legendfemales.append("rect")
     .attr("width", 15)
     .attr("height", 15)
-    .attr("fill", "red"); 
+    .attr("fill", "orange"); 
 
 legendfemales.append("text")
     .attr("x", 25)
     .attr("y", 10)
-    .text("")
+    .text("females")
     .style("font-size", "12px");
 
 }
@@ -208,10 +209,10 @@ function displayDetails(selectedData, allData) {
     // Create a div for details
     const detailsDiv = d3.select("body").append("div")
         .attr("id", "details")
-        .style("position", "absolute")
-        .style("background-color", "#f9f9f9")
+        .style("position", "center")
+        .style("background-color", "white")
         .style("padding", "10px")
-        .style("border", "1px solid #d4d4d4")
+        .style("border", "50 50 solid #d4d4d4")
         .style("border-radius", "5px")
         .style("pointer-events", "none")
         .style("opacity", 0);
@@ -255,10 +256,10 @@ function displayDetails(selectedData, allData) {
     // Create a div for details
     const detailsDiv = d3.select("body").append("div")
         .attr("id", "details")
-        .style("position", "absolute")
+        .style("position", "center")
         .style("background-color", "#f9f9f9")
         .style("padding", "10px")
-        .style("border", "1px solid #d4d4d4")
+        .style("border", "50px solid #d4d4d4")
         .style("border-radius", "5px")
         .style("pointer-events", "none")
         .style("opacity", 0);
