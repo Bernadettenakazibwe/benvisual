@@ -45,7 +45,7 @@ function updateHeatmap(filteredData) {
     const xScale = d3.scaleBand()
         .domain(filteredData.map(d => d.Country))
         .range([0, width])
-        .padding(0.1);
+        .padding(1);
 
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => Math.max(d.males, d.females))])
@@ -54,14 +54,14 @@ function updateHeatmap(filteredData) {
     // Define a color scale for males
     const colorScalemales = d3.scaleLinear()
         .domain([60, 90, d3.max(filteredData, d => d.males)])
-        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range males (light red to dark red)
+        .range(["#ffcccc", "#ff6666", "#ff0000"]); // Specify the color range males 
 
     // Define a color scale for females
     const colorScalefemales = d3.scaleLinear()
         .domain([70, 99, d3.max(filteredData, d => d.females)])
-        .range(["#cce5ff", "#4d94ff", "#0066ff"]); // Specify the color range for females(light blue to dark blue)
+        .range(["#cce5ff", "#4d94ff", "#0066ff"]);
 
-    // Add red bars males
+    // Add  bars males
     svg.selectAll(".bar-males")
         .data(filteredData)
         .enter()
@@ -74,7 +74,7 @@ function updateHeatmap(filteredData) {
         .attr("fill", d => colorScalemales(d.males)) // Use the color scale males
         .on("click", d => displayBarsForCountry(d)); // Add a click event listener
 
-    // Add blue bars for females
+    // Add  bars for females
     svg.selectAll(".bar-females")
         .data(filteredData)
         .enter()
@@ -93,7 +93,7 @@ function updateHeatmap(filteredData) {
         .call(d3.axisBottom(xScale)
         .tickValues(xScale.domain().filter((d, i) => i % 2 === 0)))
         .selectAll("text")
-       .attr("transform", "rotate(-90)")
+        .attr("transform", "rotate(-90)")
         .style("text-anchor", "end");
 
     // Add y-axis
@@ -125,15 +125,15 @@ function updateHeatmap(filteredData) {
             .on("click", d => displayBarsForCountry(d));  // Add a click event listener
     }
 
-// Add red legend males
+// Add  legend males
 const legendmales = d3.select("svg")
     .append("g")
     .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 20 units up
 
 legendmales.append("rect")
-    .attr("width", 25)
+    .attr("width", 20)
     .attr("height", 10)
-    .attr("fill", "#ff0000"); // Red color males
+    .attr("fill", "Green"); 
 
 legendmales.append("text")
     .attr("x", 25)
@@ -141,7 +141,7 @@ legendmales.append("text")
     .text("males")
     .style("font-size", "12px");
 
-// Add blue legend for females
+// Add  legend for females
 const legendfemales = d3.select("svg")
     .append("g")
     .attr("transform", "translate(-2, 20)"); // Move 10 units to the right and 5 units up
@@ -149,12 +149,12 @@ const legendfemales = d3.select("svg")
 legendfemales.append("rect")
     .attr("width", 15)
     .attr("height", 15)
-    .attr("fill", "#0066ff"); // Blue color for females
+    .attr("fill", "red"); 
 
 legendfemales.append("text")
     .attr("x", 25)
     .attr("y", 10)
-    .text("females")
+    .text("")
     .style("font-size", "12px");
 
 }
