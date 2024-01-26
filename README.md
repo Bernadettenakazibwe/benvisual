@@ -16,11 +16,12 @@ My visualization is mainly sending information to mothers in the world in order 
 In the above picture, the person can select a given country by typing in the text box and press on the search button. Below the searching part, is the heatmap  showing the development of the neurogical disorders in females(denoted in orange) and males(denoted in green). The x-axis shows the countries. 
 
 ### Clicking: 
-          When the person clicks in the orange or green bars in the heatmap of a given country, he will be taken to another page where he will see the details of the neorological disability development  of that country, the country's flag and code(abbreviation of the country.) All these in a separate apart just below another heatmap showing the neorogical development in males and females of the country, and they will appear when one clicks on the bars of the heatmap(either green or orange)
+When the person clicks in the orange or green bars in the heatmap of a given country, he will be taken to another page where he will see the details of the neorological disability development  of that country, the country's flag and code(abbreviation of the country.) All these in a separate apart just below another heatmap showing the neorogical development in males and females of the country, and they will appear when one clicks on the bars of the heatmap(either green or orange)
 
         
 
-###        Note: Some of the flags are not included in the images floder, so a default image will aappear. 
+###  Note:
+      Some of the flags are not included in the images floder, so a default image will aappear. 
 
 
 ### The figures below show what a person sees on selecting a given counrty.
@@ -35,10 +36,10 @@ In the above picture, the person can select a given country by typing in the tex
 ## Target groups.
 
 ### Mothers:
-         My visualization mainly focuses on mothers because they are solely responsible for the babies. No mother would like to see her child growing up with such disorder or developing one after growing up. Even if one grows up, he will still be taken care of and loved the same by their mothers.
+My visualization mainly focuses on mothers because they are solely responsible for the babies. No mother would like to see her child growing up with such disorder or developing one after growing up. Even if one grows up, he will still be taken care of and loved the same by their mothers.
 
-         With this information, which I want mothers to know and do more research about these neurological disorders, is to help them live a happy life. Mothers are always happy when their children are healthy and happy.
+With this information, which I want mothers to know and do more research about these neurological disorders, is to help them live a happy life. Mothers are always happy when their children are healthy and happy.
 
 
 ### Researchers:
-       My visualization also focus on researchers. This is because researchers in every country are needed to research about why the neurological disorders develop in both females and males and why in a given country or region a given sex is affected. The work of researchers, based on data they see from my visualization, they can help reduce the development of these disorders in a long run.
+My visualization also focus on researchers. This is because researchers in every country are needed to research about why the neurological disorders develop in both females and males and why in a given country or region a given sex is affected. The work of researchers, based on data they see from my visualization, they can help reduce the development of these disorders in a long run.
